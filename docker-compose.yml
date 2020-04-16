@@ -1,0 +1,21 @@
+version: '3.7'
+#
+services:
+  irissvc:
+    build:
+      context: ./build
+      args:
+        COMMIT_ID: shopdemo
+    image: wolfman0719/shop:demo
+    container_name: shopdemo
+    init: true
+    hostname: myiris
+    
+    ports:
+    # superserver default port 
+    - "51778:51773"
+    # webserver/management portal port
+    - "52778:52773"
+    
+    environment:
+    - TZ=JST-9
