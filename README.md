@@ -69,9 +69,9 @@ http://localhost:52778/shop/addorder?IRISUserName=_system&IRISPassword=demosyste
 
 #### プロダクション開始
 
-管理ポータルでInteroperabilityを選択
-構成>プロダクション
-Shop.Productionを開いて、開始ボタンを押してプロダクションを開始する
+* 管理ポータルでInteroperabilityを選択
+* 構成>プロダクション
+* Shop.Productionを開いて、開始ボタンを押してプロダクションを開始する
 
 #### 注文ファイルのコピー
 
