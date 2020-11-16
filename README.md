@@ -6,15 +6,10 @@ ShopデモアプリケーションのDocker Build
 ## ビルドプロセス
 
 ### Build
-* ```./build.sh```    for Linux, MacOS
-* ```build.sh```      for Windows 
+* ```docker-compose build```
 ### Run
-* ```./run.sh```      for Linux, MacOS
-* ```run.sh```        for Windows
+* ```docker-compose up -d```
 
--bash: ./build.sh: Permission deniedとエラーになる場合は、
-
-```chmod 777 *.sh```
 
 ## 起動方法
 
@@ -69,9 +64,9 @@ http://localhost:52778/shop/addorder?IRISUserName=_system&IRISPassword=demosyste
 
 #### プロダクション開始
 
-* 管理ポータルでInteroperabilityを選択
-* 構成>プロダクション
-* Shop.Productionを開いて、開始ボタンを押してプロダクションを開始する
+管理ポータルでInteroperabilityを選択
+構成>プロダクション
+Shop.Productionを開いて、開始ボタンを押してプロダクションを開始する
 
 #### 注文ファイルのコピー
 
