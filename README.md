@@ -5,10 +5,8 @@ ShopデモアプリケーションのDocker Build
 
 ## ビルドプロセス
 
-### Build
-* ```docker-compose build```
-### Run
-* ```docker-compose up -d```
+### Build & Run
+* ```docker-compose up -d --build```
 
 
 ## 起動方法
@@ -19,23 +17,23 @@ ShopデモアプリケーションのDocker Build
 
 ### 管理ポータル
 
-[localhost:52778/csp/sys/%25CSP.Portal.Home.zen?IRISUsername=_system&IRISPassword=demosystem](http://localhost:52778/csp/sys/%25CSP.Portal.Home.zen?IRISUsername=_system&IRISPassword=demosystem)
+[localhost:52778/csp/sys/%25CSP.Portal.Home.zen?IRISUsername=_system&IRISPassword=SYS](http://localhost:52778/csp/sys/%25CSP.Portal.Home.zen?IRISUsername=_system&IRISPassword=SYS)
 
 ### Webターミナル
 
-[localhost:52778/terminal/?IRISUsername=_system&IRISPassword=demosystem](http://localhost:52778/terminal/?IRISUsername=_system&IRISPassword=demosystem)
+[localhost:52778/terminal/?IRISUsername=_system&IRISPassword=SYS](http://localhost:52778/terminal/?IRISUsername=_system&IRISPassword=SYS)
 
 ### RESTインターフェース
 
 #### GETサンプル
 
-http://localhost:52778/shop/products?IRISUsername=_system&IRISPassword=demosystem
+http://localhost:52778/shop/products?IRISUsername=_system&IRISPassword=SYS
 
 content-type application/json; charset=utf-8
 
 #### POSTサンプル
 
-http://localhost:52778/shop/addorder?IRISUserName=_system&IRISPassword=demosystem
+http://localhost:52778/shop/addorder?IRISUserName=_system&IRISPassword=SYS
 
 {"ShipTo":{"City":"Tokyo","Street":"Ginza","PostalCode":"1600001"},"CustomerId":1,"Items":[{"ProductId":"MNT001","Amount":1},{"ProductId":"PC001","Amount":1}]}
 
@@ -53,7 +51,7 @@ http://localhost:52778/shop/addorder?IRISUserName=_system&IRISPassword=demosyste
 | 項目           | 値        |
 |---------------|------------
 | システムログイン |　_system  |
-|パスワード　	   |demosystem|
+|パスワード　	   |SYS|
 
 ### SQLサンプル
 
@@ -62,16 +60,15 @@ http://localhost:52778/shop/addorder?IRISUserName=_system&IRISPassword=demosyste
 
 ### インターオペラビリティデモ
 
-#### プロダクション開始
-
-管理ポータルでInteroperabilityを選択
-構成>プロダクション
-Shop.Productionを開いて、開始ボタンを押してプロダクションを開始する
-
-#### 注文ファイルのコピー
+#### プロダクション開始と注文ファイルのコピー
 
 ```docker ps
-docker exec -ti shopdemo /bin/bash
+docker exec -ti shopdemo /bin/sh
+
+iris session iris
+
+>do ##class(Ens.Director).StartProduction("Shop.Production")
+>h
 
 cp /intersystems/iris/shop/samples/* /intersystems/iris/shop/message/in
 ```
