@@ -1,2 +1,0 @@
-{"ShipTo":{"City":"Tokyo","Street":"Ginza","PostalCode":"160-0001"},"CustomerId":1,"Items":[{"ProductId":"MNT001","Amount":2},{"ProductId":"PC001","Amount":2}]}
-{"ShipTo":{"City":"Tokyo","Street":"Ginza","PostalCode":"1600001"},"CustomerId":1,"Items":[{"ProductId":"TEL001","Amount":10},{"ProductId":"MOU001","Amount":10}]}
