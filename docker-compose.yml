@@ -1,21 +1,19 @@
 version: '3.7'
 #
 services:
-  irissvc:
-    build:
-      context: ./build
-      args:
-        COMMIT_ID: shopdemo
-    image: wolfman0719/shop:demo
+services:
+  iris:
+    build: 
+      context: .
+      dockerfile: Dockerfile
     container_name: shopdemo
-    init: true
-    hostname: myiris
+    restart: always
     
-    ports:
-    # superserver default port 
-    - "51778:1972"
-    # webserver/management portal port
-    - "52778:52773"
-    
+    ports: 
+      - 52778:52773
+
+    volumes:
+      - ./:/irisdev/app    
+
     environment:
     - TZ=JST-9
