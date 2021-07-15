@@ -1,0 +1,35 @@
+﻿<HTML>
+<HEAD>
+<TITLE>インターネット・オーダリング・システム</TITLE>
+</HEAD>
+<FRAMESET rows="94,79%" frameborder="NO" border="0">
+  <FRAME src="title.csp" noresize scrolling="NO">
+<FRAMESET cols="232,*" frameborder="NO" border="0">
+  <FRAME name="menu" src="menu.csp" scrolling="NO" noresize>
+  <FRAME name="main" src="main.csp" noresize scrolling="AUTO">
+</FRAMESET>
+<NOFRAMES>
+<BODY>
+<SCRIPT LANGUAGE=CACHE METHOD="OnPreHTTP" RETURNTYPE="%Boolean">
+ set cust=##class(Shop.Customer).CheckPasswd(%request.Get("username"),%request.Get("password"))
+ if cust="" {
+	 set %session.Data("msg")="パスワードが誤っています。"
+	 set %session.Data("detail")="利用者ID、パスワードが正しいか確認のうえ、再度ログインしてください。"
+	 set %session.Data("return")="login.htm"
+	 set %response.ServerSideRedirect="errormsg.csp"
+	 
+	 quit 1
+ }
+ // 顧客情報の初期化
+ set %session.Data("name")=cust.Name
+ set %session.Data("total")=cust.TotalOrderAmount
+ set %session.Data("oid")=cust.%Id()
+ kill %session.Data("basket")
+  
+ quit 1
+</SCRIPT>
+<P>このページをご覧いただくにはフレーム対応のブラウザが必要です。</P>
+</BODY>
+</NOFRAMES>
+</FRAMESET>
+</HTML>

@@ -1,0 +1,174 @@
+﻿<HTML>
+<HEAD>
+<TITLE>注文受付</TITLE>
+</HEAD>
+<BODY>
+<SCRIPT LANGUAGE=CACHE METHOD="OnPreHTTP" RETURNTYPE="%Boolean">
+
+ // オブジェクトIDのチェック
+ if $get(%session.Data("oid"))="" {
+	 set %session.Data("msg")="ログアウトしました。oid=null"
+	 set %session.Data("detail")="お手数ですが、再度ログインしてください。"
+	 set %session.Data("return")="login.htm"
+	 set %response.ServerSideRedirect="errormsg.csp"
+
+	 quit 1
+ }
+
+ // 顧客情報のオブジェクトを取得
+ set cust=##class(Shop.Customer).%OpenId(%session.Data("oid"))
+ if cust="" {
+	 set %session.Data("msg")="ログアウトしました。oid="_%session.Data("oid")
+	 set %session.Data("detail")="お手数ですが、再度ログインしてください。"
+	 set %session.Data("return")="login.htm"
+	 set %response.ServerSideRedirect="errormsg.csp"
+
+	 quit 1
+ }
+ 
+ // オーダーの作成
+ set oref=##class(Shop.POrder).create(cust,cust.Location)
+ if oref="" {
+	 set %session.Data("msg")="オーダーが作成できませんでした。oref=null"
+	 set %session.Data("detail")="お手数ですが、再度ログインしてください。"
+	 set %session.Data("return")="login.htm"
+	 set %response.ServerSideRedirect="errormsg.csp"
+
+	 quit 1
+ } 
+ 
+ // オーダーエントリの書込み
+ set item="",num=0
+ for  {
+	 set item=$order(%session.Data("basket",item))
+	 quit:item=""
+	 
+	 // 製品情報の取得
+	 set pref=##class(Shop.Product).%OpenId(item)
+	 //set pref=##class(User.Product).%OpenId(item)
+	 quit:pref=""
+	 do oref.addItem(pref,%session.Data("basket",item))
+	 
+	 set num=num+1
+ }
+ if num=0 {
+	 set %session.Data("msg")="オーダーがありませんでした。"
+	 set %session.Data("detail")="お手数ですが、再度ログインしてください。"
+	 set %session.Data("return")="login.htm"
+	 set %response.ServerSideRedirect="errormsg.csp"
+
+	 quit 1
+}
+if pref="" {
+	 set %session.Data("msg")="オーダーが作成できませんでした。no pref"
+	 set %session.Data("detail")="お手数ですが、再度ログインしてください。"
+	 set %session.Data("return")="login.htm"
+	 set %response.ServerSideRedirect="errormsg.csp"
+
+	 quit 1
+}
+
+// オーダーの確定
+set stat=oref.place()	  
+if $$$ISERR(stat) {
+	 set %session.Data("msg")="オーダーが作成できませんでした。"
+	 set %session.Data("detail")="お手数ですが、再度ログインしてください。"_$system.Status.DisplayError(stat)
+	 set %session.Data("return")="login.htm"
+	 set %response.ServerSideRedirect="errormsg.csp"
+
+	 quit 1
+}
+
+// セッションログアウト
+set %session.EndSession=1
+ 
+ quit 1
+</SCRIPT>
+
+<TABLE cellpadding="0" cellspacing="0" border="0">
+  <TBODY>
+    <TR>
+      <TD width="46" height="41"></TD>
+      <TD width="303" height="41"></TD>
+      <TD></TD>
+    </TR>
+    <TR>
+      <TD width="46" height="26"></TD>
+      <TD height="26" colspan="2" nowrap><FONT size="+2">以下のご注文を受け付けました。</FONT><FONT size="+1"><BR>
+      ご利用ありがとうございました。</FONT></TD>
+    </TR>
+    <TR>
+      <TD width="46" height="30"></TD>
+      <TD width="303" height="30"></TD>
+      <TD height="30"></TD>
+    </TR>
+    <TR>
+      <TD width="46" height="82"></TD>
+      <TD width="303" height="82">
+      <TABLE border="1" width="100%">
+        <TBODY>
+          <TR>
+            <TD align="right" bgcolor="#FF9999" width="77">注文番号</TD>
+            <TD bgcolor="#FFCCCC" width="210">#(oref.OrderNumber)#</TD>
+          </TR>
+          <TR>
+            <TD align="right" bgcolor="#FF9999" width="77">注文日</TD>
+            <TD bgcolor="#FFCCCC" width="210">#(oref.PurchaseDt)#</TD>
+          </TR>
+          <TR>
+            <TD align="right" bgcolor="#FF9999" width="77">お名前</TD>
+            <TD bgcolor="#FFCCCC" width="210">#(cust.Name)#</TD>
+          </TR>
+          <TR>
+            <TD align="right" bgcolor="#FF9999" width="77">ご住所</TD>
+            <TD bgcolor="#FFCCCC" width="210">〒#(cust.Location.PostalCode)#<BR>
+            #(cust.Location.City)# #(cust.Location.Street)#</TD>
+          </TR>
+          <TR>
+            <TD align="right" bgcolor="#FF9999" width="77">合計金額</TD>
+            <TD align="left" bgcolor="#FFCCCC" width="210">#($fnumber(oref.TotalPrice,","))#円</TD>
+          </TR>
+        </TBODY>
+      </TABLE>
+      </TD>
+      <TD height="82"></TD>
+    </TR>
+    <TR>
+      <TD height="21"></TD>
+      <TD height="21"></TD>
+      <TD></TD>
+    </TR>
+    <TR>
+      <TD height="7"></TD>
+      <TD height="7">ご注文内容</TD>
+      <TD></TD>
+    </TR>
+    <TR>
+      <TD></TD>
+      <TD>
+      <TABLE border="1">
+        <TBODY>
+          <TR>
+            <TD width="75" bgcolor="#FF9A9C">商品コード</TD>
+            <TD align="left" bgcolor="#FF9999" width="197">品名</TD>
+            <TD bgcolor="#FF9A9C" width="81">価格</TD>
+            <TD bgcolor="#FF9A9C" width="55">数量</TD>
+          </TR>
+		  <CSP:LOOP COUNTER="i" FROM=1 TO=#(oref.Items.Count())#>
+          <TR>
+            <TD width="75" bgcolor="#FFCFCE">#(oref.Items.GetAt(i).Product.Code)#</TD>
+            <TD align="left" bgcolor="#FFCFCE" width="197">#(oref.Items.GetAt(i).Product.Name)#</TD>
+            <TD bgcolor="#FFCFCE" width="81" align="right">#($fnumber(oref.Items.GetAt(i).UnitPrice,","))#円</TD>
+            <TD width="55" align="right" bgcolor="#FFCFCE">#(oref.Items.GetAt(i).Amount)#</TD>
+          </TR>
+		  </CSP:LOOP>
+        </TBODY>
+      </TABLE>
+      </TD>
+      <TD></TD>
+    </TR>
+  </TBODY>
+</TABLE>
+<a href="login.htm">ログインページへ</a>
+</BODY>
+</HTML>

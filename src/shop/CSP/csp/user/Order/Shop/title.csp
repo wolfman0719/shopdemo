@@ -1,0 +1,16 @@
+﻿<HTML>
+<HEAD>
+<TITLE>タイトル</TITLE>
+</HEAD>
+<BODY bgcolor="#FF9A9C">
+<H2 align="center"><FONT color="#333333">インターネット・オーダリング・システム</FONT></H2>
+<table width=100%>
+  <tr><td>
+    <FONT color="#333333">#(%session.Data("name"))#　様　いつもご利用いただきありがとうございます。</FONT>
+  </td><td align="right">
+    <FONT color="#333333" size="-1">これまでのお買い上げ金額: #($fnumber(%session.Data("total"),","))#円
+  </td>
+  </tr>
+</table>
+</BODY>
+</HTML>

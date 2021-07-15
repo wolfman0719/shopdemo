@@ -1,0 +1,33 @@
+﻿<HTML>
+<HEAD>
+<TITLE>メニュー</TITLE>
+<STYLE type="text/css">
+<!--
+SELECT{
+  font-family : "ＭＳ ゴシック";
+}
+.editnumeric{
+  text-align : right;
+}
+-->
+</STYLE>
+</HEAD>
+<BODY bgcolor="#FFCFCE">
+<P align="center"><U><FONT color="#333333"><B>かごの内容</B></FONT></U></P>
+<FORM NAME="order" TARGET="_top" ACTION="result.csp" METHOD="post">
+<TABLE border="1" cellpadding="5" cellspacing="0">
+  <TBODY>
+    <TR>
+      <TD width="127" valign="top" height="47" align="left">
+      合計金額<BR>
+      <INPUT size="10" type="text" name="total" value="0" readonly class="editnumeric"> 円<BR><BR>
+      注文明細<BR>
+      <SELECT Name="orderlist" size="10">
+        <OPTION selected>　　　　　　　　　　　　</OPTION>
+      </SELECT></TD>
+    </TR>
+  </TBODY>
+</TABLE>
+<P align="center"><INPUT type="submit" name="ok" value="注文"></FORM>
+</BODY>
+</HTML>
