@@ -65,6 +65,8 @@ http://localhost:52778/shop/addorder?IRISUserName=_system&IRISPassword=SYS
 ```docker ps
 docker exec -ti shopdemo /bin/sh
 
+rm /intersystems/iris/shop/message/in/.gitkeep
+
 iris session iris
 
 >do ##class(Ens.Director).StartProduction("Shop.Production")
