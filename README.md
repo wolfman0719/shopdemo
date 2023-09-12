@@ -27,13 +27,13 @@ ShopデモアプリケーションのDocker Build
 
 #### GETサンプル
 
-http://localhost:52773/shop/products?IRISUsername=_system&IRISPassword=SYS
+http://localhost:52773/api/shop/products?IRISUsername=_system&IRISPassword=SYS
 
 content-type application/json; charset=utf-8
 
 #### POSTサンプル
 
-http://localhost:52773/shop/addorder?IRISUserName=_system&IRISPassword=SYS
+http://localhost:52773/api/shop/addorder?IRISUserName=_system&IRISPassword=SYS
 
 {"ShipTo":{"City":"Tokyo","Street":"Ginza","PostalCode":"1600001"},"CustomerId":1,"Items":[{"ProductId":"MNT001","Amount":1},{"ProductId":"PC001","Amount":1}]}
 
