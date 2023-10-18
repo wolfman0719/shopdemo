@@ -11,13 +11,13 @@ ClassMethod createRecord() As %Status
 		
 	  if $data(%request) {
 	    set len = 1000
-        set %response.ContentType="application/json"
+            set %response.ContentType="application/json"
 	    set %response.CharSet = "utf-8"
-		set json = %request.Content.Read(.len,.status)
+	    set json = %request.Content.Read(.len,.status)
 	  }
 	  
 	  set status = ##class(Shop.POrder).createRecord(json, .pid)
-      if 'status $$$ThrowStatus(status)
+          $$$ThrowOnError(status)
 
 	  set result = {}
 	  set order = ##class(Shop.POrder).%OpenId(pid)
