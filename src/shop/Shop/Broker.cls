@@ -3,6 +3,8 @@ Class Shop.Broker Extends %CSP.REST
 
 Parameter CONVERTINPUTSTREAM = 1;
 
+Parameter HandleCorsRequest = 1;
+
 XData UrlMap
 {
 <Routes>
@@ -19,6 +21,7 @@ XData UrlMap
   <Route Url="/addorder" Method="POST" Call="Shop.Rest.POrder:createRecord"/>
   <Route Url="/order/:id" Method="GET" Call="Shop.Rest.POrder:getRecord"/>
   <Route Url="/orders" Method="GET" Call="Shop.Rest.POrder:listRecords"/>
+  <Route Url="/checkpassword/:userid/:password" Method="GET" Call="Shop.Rest.Customer:checkPassword"/>
 </Routes>
 }
 

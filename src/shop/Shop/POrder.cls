@@ -84,12 +84,12 @@ Method %OnBeforeSave(insert As %Boolean) As %Status [ Private, ServerOnly = 1 ]
 	quit $$$OK
 }
 
-ClassMethod createRecord(pInfo As %String) As %Status
+ClassMethod createRecord(pInfo As %String, ByRef pId As %Integer) As %Status
 {
 	set status = $$$OK
-	
+
 	try {
-			
+     
 	  if $isobject(pInfo) {
 	    set tempobj = pInfo
 	  }
@@ -100,11 +100,7 @@ ClassMethod createRecord(pInfo As %String) As %Status
       set order = ##class(Shop.POrder).%New()
       
       set customerid = tempobj.CustomerId
-      
-      set order.ShipTo.City = tempobj.ShipTo.City
-      set order.ShipTo.Street = tempobj.ShipTo.Street
-      set order.ShipTo.PostalCode = tempobj.ShipTo.PostalCode
-      
+            
       set cust = ##class(Shop.Customer).%OpenId(customerid,.status)
       
       if status'=$$$OK {
@@ -113,7 +109,10 @@ ClassMethod createRecord(pInfo As %String) As %Status
 	     $$$ThrowStatus(status)
 	   }
 	   
-	   set order.Customer = cust
+	  set order.ShipTo.City = cust.Location.City
+      set order.ShipTo.Street = cust.Location.Street
+      set order.ShipTo.PostalCode = cust.Location.PostalCode
+      set order.Customer = cust
 	   
 	   set order.PurchaseDt = $piece($h,",",1)
 	   
@@ -124,7 +123,9 @@ ClassMethod createRecord(pInfo As %String) As %Status
 	   while iter.%GetNext(.key,.val) {
 		   //set line = {}.%FromJSON(val)
 		   set productid = val.ProductId
+		   if productid = "" set productid = val.productCode
 		   set amount = val.Amount
+		   if amount = "" set amount = val.units
 		   set product = ##class(Shop.Product).%OpenId(productid,.status)
            if status'=$$$OK {
 	          write "商品が存在しない:" 
@@ -141,12 +142,13 @@ ClassMethod createRecord(pInfo As %String) As %Status
 	   }
 	   
 	  set status = order.%Save()
-	  
       if status'=$$$OK {
 	     write "注文エラー:" 
 	     do $System.Status.DisplayError(status)
 	     $$$ThrowStatus(status)
 	   }
+	 
+	  set pId = order.%Id()
 
 	  }
 	  catch e {

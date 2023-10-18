@@ -15,7 +15,8 @@ Property Location As Shop.Address;
 
 Relationship POrders As Shop.POrder [ Cardinality = many, Inverse = Customer ];
 
-Property TotalOrderAmount As %Integer [ Calculated ];
+Property TotalOrderAmount As %Integer [ Calculated, SqlComputeCode = { Set {TotalOrderAmount}=##class(Shop.Customer).TotalOrderAmount({ID})
+}, SqlComputed ];
 
 // 削除フラグ（データは残す）
 
@@ -48,11 +49,12 @@ Method determinePrice(listprice As %Integer) As %Integer
 
 // これまでの購入金額を計算
 
-Method TotalOrderAmountGet() As %Integer
+ClassMethod TotalOrderAmount(pId As %Integer) As %Integer
 {
+	Set Order = ..%OpenId(pId)
 	Set total = 0
-	For i=1:1:..POrders.Count() {
-		Set o = ..POrders.GetAt(i)
+	For i=1:1:Order.POrders.Count() {
+		Set o = Order.POrders.GetAt(i)
 		
 		// 処理中のオーダを除いて計算する
 		If o.IsProcessing = 0 { Set total = total + o.TotalPrice }
@@ -253,9 +255,11 @@ ClassMethod getRecord(pId As %String) As %String
         set dobj.Name = rset.name
         set dobj.UserName = rset.username
         set dobj.TotalOrderAmount = rset.totalorderamount
-        set dobj.Location.City = rset.city
-        set dobj.Location.PostalCode = rset.postalcode
-        set dobj.Location.Street = rset.street
+		set location = {}
+        set location.City = rset.city
+        set location.PostalCode = rset.postalcode
+        set location.Street = rset.street
+		set dobj.Location = location
         write dobj.%ToJSON()
       }
       	  
