@@ -17,6 +17,7 @@ USER ${ISC_PACKAGE_MGRUSER}
 COPY src/shop/Shop $ISC_TEMP_DIR/Shop
 COPY src/shop/images $ISC_TEMP_DIR/images
 COPY src/shop/CSP/csp/user/ $ISC_PACKAGE_INSTALLDIR/csp/user/
+COPY src/shop/images $ISC_PACKAGE_INSTALLDIR/csp/user/images
 COPY src/shop/message $ISC_TEMP_DIR/message
 COPY src/shop/samples $ISC_TEMP_DIR/samples
 COPY iris.script /tmp/iris.script
