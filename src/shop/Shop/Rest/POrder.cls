@@ -17,8 +17,8 @@ ClassMethod createRecord() As %Status
 	  }
 	  
 	  set status = ##class(Shop.POrder).createRecord(json, .pid)
-      $$$ThrowStatus(status)
-	  
+      if 'status $$$ThrowStatus(status)
+
 	  set result = {}
 	  set order = ##class(Shop.POrder).%OpenId(pid)
 	  set result.orderDate = $zdate(order.PurchaseDt,8)
@@ -26,14 +26,17 @@ ClassMethod createRecord() As %Status
 	  set result.name = order.Customer.Name
 	  set result.address = order.Customer.Location.PostalCode_" "_order.Customer.Location.City_" "_order.Customer.Location.Street
 	  set result.amount = order.TotalPrice
+	  set items = []
 	  for i=1:1:order.Items.Count() {
 	    set item = {}
 	    set item.productCode = order.Items.GetAt(i).Product.Code
 		set item.productName = order.Items.GetAt(i).Product.Name
 		set item.price = order.Items.GetAt(i).Product.ListPrice
 		set item.units = order.Items.GetAt(i).Amount
-		do result.Items.%Push(item)
+		do items.%Push(item)
 	  }
+
+	  set result.Items = items
 	
 	  do result.%ToJSON()
 	}
