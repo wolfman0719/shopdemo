@@ -12,6 +12,8 @@ ClassMethod createRecord() As %Status
 	  if $data(%request) {
 	    set len = 1000
 		set json = %request.Content.Read(.len,.status)
+        set %response.ContentType="application/json"
+	    set %response.CharSet = "utf-8"
 	  }
 	  
 	  set status = ##class(Shop.Product).createRecord(json)
@@ -34,6 +36,8 @@ ClassMethod modifyRecord(pInfo As %String) As %Status
 	  if $data(%request) {
 	    set len = 1000
 		set json = %request.Content.Read(.len,.status)
+        set %response.ContentType="application/json"
+	    set %response.CharSet = "utf-8"
 	  }
 	  
 	  set status = ##class(Shop.Product).modifyRecord(json)
@@ -55,7 +59,7 @@ ClassMethod listRecords() As %String
 	
       if $data(%request) {
         set %response.ContentType="application/json"
-	    set %response.CharSet = %request.CharSet
+	    set %response.CharSet = "utf-8"
 	  }
 	  
 	  set status = ##class(Shop.Product).listRecords()
@@ -78,7 +82,7 @@ ClassMethod getRecord(pCode As %String) As %String
 	
       if $data(%request) {
         set %response.ContentType="application/json"
-	    set %response.CharSet = %request.CharSet
+	    set %response.CharSet = "utf-8"
 	  }
 	  
 	  set status = ##class(Shop.Product).getRecord(pCode)
@@ -101,7 +105,7 @@ ClassMethod deleteRecord(pCode As %String) As %String
 
 	  if $data(%request) {
         set %response.ContentType="application/json"
-	    set %response.CharSet = %request.CharSet
+	    set %response.CharSet = "utf-8"
 	  }
 	
 	  set status = ##class(Shop.Product).deleteRecord(pCode)

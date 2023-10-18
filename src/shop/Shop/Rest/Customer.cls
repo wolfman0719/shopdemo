@@ -10,6 +10,8 @@ ClassMethod createRecord() As %Status
 	try {
 		
 	  if $data(%request) {
+        set %response.ContentType="application/json"
+	    set %response.CharSet = "utf-8"
 	    set len = 1000
 		set json = %request.Content.Read(.len,.status)
 	  }
@@ -32,6 +34,8 @@ ClassMethod modifyRecord(pInfo As %String) As %Status
 	try {
 		
 	  if $data(%request) {
+        set %response.ContentType="application/json"
+	    set %response.CharSet = "utf-8"
 	    set len = 1000
 		set json = %request.Content.Read(.len,.status)
 	  }
@@ -55,7 +59,7 @@ ClassMethod listRecords() As %String
 	
       if $data(%request) {
         set %response.ContentType="application/json"
-	    set %response.CharSet = %request.CharSet
+	    set %response.CharSet = "utf-8"
 	  }
 	  
 	  set status = ##class(Shop.Customer).listRecords()
@@ -78,7 +82,7 @@ ClassMethod getRecord(pId As %String) As %String
 	
       if $data(%request) {
         set %response.ContentType="application/json"
-	    set %response.CharSet = %request.CharSet
+	    set %response.CharSet = "utf-8"
 	  }
 	  
 	  set status = ##class(Shop.Customer).getRecord(pId)
@@ -101,7 +105,7 @@ ClassMethod deleteRecord(pCode As %String) As %String
 
 	  if $data(%request) {
         set %response.ContentType="application/json"
-	    set %response.CharSet = %request.CharSet
+	    set %response.CharSet = "utf-8"
 	  }
 	
 	  set status = ##class(Shop.Customer).deleteRecord(pCode)
@@ -112,6 +116,41 @@ ClassMethod deleteRecord(pCode As %String) As %String
 		set status = e.AsStatus()
 	}
 	    	
+	Quit status
+}
+
+ClassMethod checkPassword(pUserId As %String, pPassword) As %Status
+{
+	set status = $$$OK
+	
+	try {
+		
+	  if $data(%request) {
+        set %response.ContentType="application/json"
+	    set %response.CharSet = "utf-8"
+	  }
+	  
+	  set cust=##class(Shop.Customer).CheckPasswd(pUserId, pPassword)
+
+	  set return = {}
+
+	  if cust = "" {
+		set return.authorized = "ng"
+
+	  }
+	  else {
+		set return.authorized = "ok"
+		set return.ID = cust.%Id()
+	  }
+
+	  do return.%ToJSON()
+	
+	}
+	catch e {
+		
+	  set status = e.AsStatus()
+	}
+	    		    	
 	Quit status
 }
 
