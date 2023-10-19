@@ -198,7 +198,7 @@ ClassMethod listRecords() As %String
         set dobj.Name = rset.name
         set dobj.Description = rset.description
         set dobj.ListPrice = rset.listprice
-		set dobj.Image = $case(rset.code,"MNT001":"monitor","MOU001":"mouse","PC001":"notepc","TEL001":"telephone",:"nodata")
+		set dobj.Image = $case(rset.code,"MNT001":"monitor.gif","MOU001":"mouse.gif","PC001":"notepc.gif","TEL001":"telephone.gif",:"nodata")
         do array.%Push(dobj)
       }
       
