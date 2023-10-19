@@ -2,11 +2,11 @@
 
 ## react app テンプレート作成
 
-```% npx create-react-app pg --template typescript```
+```% npx create-react-app shopdemo --template typescript```
 
 ## bootstrapインストール
 
-```% cd pg```
+```% cd shopdemo```
 
 ```% npm install react-bootstrap bootstrap```
 
