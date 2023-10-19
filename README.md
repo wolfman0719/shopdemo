@@ -62,7 +62,8 @@ http://localhost:52773/api/shop/addorder?IRISUserName=_system&IRISPassword=SYS
 
 #### プロダクション開始と注文ファイルのコピー
 
-```docker ps
+```
+docker ps
 docker exec -ti shopdemo /bin/sh
 
 rm /intersystems/iris/shop/message/in/.gitkeep
@@ -79,3 +80,11 @@ cp /intersystems/iris/shop/samples/* /intersystems/iris/shop/message/in
 
 * `select * from shop.porder`
 * `select * from shop.orderitem`
+
+
+### react デモ
+
+```
+cd react
+npm start
+
