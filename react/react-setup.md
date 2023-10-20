@@ -46,7 +46,7 @@
 
    Shop.tsx
 
-   ShoppingCart
+   ShoppingCart.tsx
    
 ## serverconfig.jsonの調整
 
