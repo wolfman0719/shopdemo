@@ -11,15 +11,10 @@ const applicationName = configinfo.ApplicationName;
 
 export const Header = (props: any) => {
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
   const [customerName, setCustomerName] = useState("");
   const [totalOrderAmount, setTotalOrderAmount] = useState(0);
   
   useEffect( () => {
-
-	setIsLoading(true);
-    setIsError(false);
   
 	axios
 	  .get<any>(`http://${serverAddress}:${serverPort}${applicationName}/customer/${props.customerId}?IRISUsername=${username}&IRISPassword=${password}`)
@@ -28,10 +23,9 @@ export const Header = (props: any) => {
       setTotalOrderAmount(result.data.TotalOrderAmount);
 	  })
       .catch((error: any) => {
-        setIsError(true)
         console.log('error = %o' ,error);
 	  })      
-      
+  // eslint-disable-next-line react-hooks/exhaustive-deps    
       }, []);
         
   return (

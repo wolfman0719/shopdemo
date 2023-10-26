@@ -54,6 +54,15 @@ export const OrderEntry = (props: any) => {
       .catch((error: any) => {
         setIsError(true)
         console.dir(error);
+		if (error.response) {			
+		  setErrorText(error.response.data.summary);
+		}
+		else if (error.request) {
+		  setErrorText(error.request);
+		} 
+		else {
+		  setErrorText(error.message);
+		}
 	  })
 	  // eslint-disable-next-line react-hooks/exhaustive-deps
       .finally(() => setIsLoading(false));}, []);   

@@ -1,8 +1,7 @@
 import React from 'react';
-import axios from "axios";
 import { useEffect, useState, useContext } from "react";
 import { useNavigate } from 'react-router-dom';
-import {ShopContext, shopItem} from "./Shop";
+import {ShopContext} from "./Shop";
 
 
 export const ShoppingCart = (props: any) => {
@@ -11,10 +10,6 @@ export const ShoppingCart = (props: any) => {
   
   const {customerId} = props;
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
-  const [errortext, setErrorText] = useState("");
-  const [units, setUnits] = useState("");
   const [totalAmount, setTotalAmount] = useState(0);
   const navigate = useNavigate();
 

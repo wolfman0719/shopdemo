@@ -1,9 +1,8 @@
 import React from 'react';
-import { createContext, useState, useContext, Dispatch,SetStateAction } from "react";
+import { createContext, useState, Dispatch,SetStateAction } from "react";
 import { Header } from './Header';
 import { ShoppingCart } from './ShoppingCart';
 import { ProductList } from './ProductList';
-import { useWindowSize } from "../hooks/useWindowSize";
 import { useLocation } from "react-router-dom"
 
 export type shopItem = {
@@ -24,9 +23,7 @@ export const Shop = () => {
   const [orderItems, setOrderItems] = useState<shopItem[]>([]);
   
   const location = useLocation();
-  
-  const [,height] = useWindowSize();
-      
+        
   const values={orderItems,setOrderItems};
   
   return (

@@ -1,9 +1,8 @@
 import React from 'react';
 import axios from "axios";
-import { ChangeEvent, useEffect, useState, useContext } from "react";
-import { useWindowSize } from "../hooks/useWindowSize";
+import { useEffect, useState, useContext } from "react";
 import configinfo from '../serverconfig.json';
-import {ShopContext, shopItem} from "./Shop";
+import {ShopContext} from "./Shop";
 
 
 const tempCart: any = [];
@@ -22,8 +21,6 @@ const tempCart: any = [];
   const username = configinfo.Username;
   const password = configinfo.Password;
   const applicationName = configinfo.ApplicationName;
-
-  const [width] = useWindowSize();
 
   const addShoppingCart = (index: number) => {
     
@@ -63,6 +60,16 @@ const tempCart: any = [];
       .catch((error: any) => {
         setIsError(true)
         console.dir(error);
+		if (error.response) {			
+		  setErrorText(error.response.data.summary);
+		}
+		else if (error.request) {
+		  setErrorText(error.request);
+		} 
+		else {
+		  setErrorText(error.message);
+		}
+        
 	  })
 	  // eslint-disable-next-line react-hooks/exhaustive-deps
       .finally(() => setIsLoading(false));}, []);   
