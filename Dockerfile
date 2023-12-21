@@ -1,4 +1,3 @@
-ARG IMAGE=containers.intersystems.com/intersystems/iris-community-arm64:laatest-cd
 ARG IMAGE=containers.intersystems.com/intersystems/iris-community:latest-cd
 FROM $IMAGE
 
