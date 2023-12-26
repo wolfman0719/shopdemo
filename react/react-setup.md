@@ -26,7 +26,7 @@
 
   index.html
 
-- src
+- 
 
   index.tsx
 
