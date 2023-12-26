@@ -47,6 +47,10 @@
    Shop.tsx
 
    ShoppingCart.tsx
+
+- hooks
+  
+  useWindowSize.tsx
    
 ## serverconfig.jsonの調整
 
