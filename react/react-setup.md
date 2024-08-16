@@ -94,9 +94,11 @@
     Removes this tool and copies build dependencies, configuration files
     and scripts into the app directory. If you do this, you can’t go back!
 
-## http.confの修正（以下の行を追加）
+## CORS設定
 
-CORSの設定が必要
+開発モード(npm start)で動作させるためには、CORSの設定が必要
+
+### http.confの修正（以下の行を追加）
 
 macOSの場合
 
@@ -113,4 +115,8 @@ macOSの場合
 </IfModule>
 ```
 
-IISの場合は、デフォルト設定でOK
+### IIS
+
+IISの場合は、以下の設定を参考
+
+https://mihono-bourbon.com/iis-cors/
