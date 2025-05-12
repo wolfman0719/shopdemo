@@ -7,14 +7,15 @@ Property RepName As %String(TRUNCATE = 1);
 
 Method determinePrice(listprice As %Integer) As %Integer
 {
-	Set price = 0
-	// これまでの購入金額に応じて割引
-	If ..TotalOrderAmount > 1000 {
-		Set price = listprice * 0.8
-	} Else {
-		Set price = listprice		
-	}
-	Quit price
+  Set price = 0
+  // これまでの購入金額に応じて割引
+  If ..TotalOrderAmount > 1000 {
+    Set price = listprice * 0.8
+  } 
+  Else {
+    Set price = listprice		
+  }
+  Quit price
 }
 
 Storage Default
