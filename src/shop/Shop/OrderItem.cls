@@ -15,7 +15,7 @@ Relationship POrder As Shop.POrder [ Cardinality = parent, Inverse = Items ];
 
 Method SubtotalGet() As %Integer
 {
-	Quit ..UnitPrice * ..Amount
+  Quit ..UnitPrice * ..Amount
 }
 
 Storage Default
