@@ -41,32 +41,32 @@ Index CustomerIndex On Customer;
 
 ClassMethod create(cust As Shop.Customer, shipto As Shop.Address) As Shop.POrder
 {
-	Set po = ##class(Shop.POrder).%New()
-	Set po.Customer = cust
-	Set po.ShipTo = shipto
-	Set po.IsProcessing = 1
-	Quit po
+  Set po = ##class(Shop.POrder).%New()
+  Set po.Customer = cust
+  Set po.ShipTo = shipto
+  Set po.IsProcessing = 1
+  Quit po
 }
 
 // 明細追加
 
 Method addItem(p As Shop.Product, amt As %Integer)
 {
-	Set item = ##class(Shop.OrderItem).%New()
-	Set item.Product = p
-	Set item.UnitPrice = ..Customer.determinePrice(p.ListPrice)
-	Set item.Amount = amt
-	Do ..Items.Insert(item)
+  Set item = ##class(Shop.OrderItem).%New()
+  Set item.Product = p
+  Set item.UnitPrice = ..Customer.determinePrice(p.ListPrice)
+  Set item.Amount = amt
+  Do ..Items.Insert(item)
 }
 
 // オーダ確定
 
 Method place() As %Status
 {
-	Set ..PurchaseDt = +$horolog
-	//Set ..OrderNumber = "O"_$Justify(..getSeqNum(), 9)
-	Set ..IsProcessing = 0
-	Quit ..%Save()
+  Set ..PurchaseDt = +$horolog
+  //Set ..OrderNumber = "O"_$Justify(..getSeqNum(), 9)
+  Set ..IsProcessing = 0
+  Quit ..%Save()
 }
 
 // 連続番号を取得
@@ -74,100 +74,100 @@ Method place() As %Status
 /// [Previously private]
 ClassMethod getSeqNum() As %Integer
 {
-	Quit $Increment(^Shop.Order)
+  Quit $Increment(^Shop.Order)
 }
 
 Method %OnBeforeSave(insert As %Boolean) As %Status [ Private, ServerOnly = 1 ]
 {
-    // body of method here...
-	Set ..OrderNumber = "O"_$Justify(..getSeqNum(), 9)
-	quit $$$OK
+  // body of method here...
+  Set ..OrderNumber = "O"_$Justify(..getSeqNum(), 9)
+  quit $$$OK
 }
 
 ClassMethod createRecord(pInfo As %String, ByRef pId As %Integer) As %Status
 {
-	set status = $$$OK
+  set status = $$$OK
 
-	try {
+  try {
      
-	  if $isobject(pInfo) {
-	    set tempobj = pInfo
-	  }
-	  else {
-	    set tempobj = ##class(%DynamicAbstractObject).%FromJSON(pInfo)
-	  }
+    if $isobject(pInfo) {
+      set tempobj = pInfo
+    }
+    else {
+      set tempobj = ##class(%DynamicAbstractObject).%FromJSON(pInfo)
+    }
       
-      set order = ##class(Shop.POrder).%New()
+    set order = ##class(Shop.POrder).%New()
       
-      set customerid = tempobj.CustomerId
+    set customerid = tempobj.CustomerId
             
-      set cust = ##class(Shop.Customer).%OpenId(customerid,.status)
+    set cust = ##class(Shop.Customer).%OpenId(customerid,.status)
       
+    if status'=$$$OK {
+      write "顧客が存在しない:" 
+      do $System.Status.DisplayError(status)
+      $$$ThrowStatus(status)
+    }
+	   
+    set order.ShipTo.City = cust.Location.City
+    set order.ShipTo.Street = cust.Location.Street
+    set order.ShipTo.PostalCode = cust.Location.PostalCode
+    set order.Customer = cust
+	   
+    set order.PurchaseDt = $piece($h,",",1)
+	   
+    set order.IsProcessing = 0
+	   
+    set iter = tempobj.Items.%GetIterator()
+	   
+    while iter.%GetNext(.key,.val) {
+      //set line = {}.%FromJSON(val)
+      set productid = val.ProductId
+      if productid = "" set productid = val.productCode
+      set amount = val.Amount
+      if amount = "" set amount = val.units
+      set product = ##class(Shop.Product).%OpenId(productid,.status)
       if status'=$$$OK {
-	     write "顧客が存在しない:" 
-	     do $System.Status.DisplayError(status)
-	     $$$ThrowStatus(status)
-	   }
-	   
-	  set order.ShipTo.City = cust.Location.City
-      set order.ShipTo.Street = cust.Location.Street
-      set order.ShipTo.PostalCode = cust.Location.PostalCode
-      set order.Customer = cust
-	   
-	   set order.PurchaseDt = $piece($h,",",1)
-	   
-	   set order.IsProcessing = 0
-	   
-	   set iter = tempobj.Items.%GetIterator()
-	   
-	   while iter.%GetNext(.key,.val) {
-		   //set line = {}.%FromJSON(val)
-		   set productid = val.ProductId
-		   if productid = "" set productid = val.productCode
-		   set amount = val.Amount
-		   if amount = "" set amount = val.units
-		   set product = ##class(Shop.Product).%OpenId(productid,.status)
-           if status'=$$$OK {
-	          write "商品が存在しない:" 
-	          do $System.Status.DisplayError(status)
-	          $$$ThrowStatus(status)
-	       }
+        write "商品が存在しない:" 
+	do $System.Status.DisplayError(status)
+	$$$ThrowStatus(status)
+      }
 	       
-	       set itemline = ##class(Shop.OrderItem).%New()
+      set itemline = ##class(Shop.OrderItem).%New()
 	       
-	       set itemline.Product = product
-	       set itemline.Amount = amount
-	       set itemline.UnitPrice = product.ListPrice
-	       set status = order.Items.Insert(itemline)
-	   }
+      set itemline.Product = product
+      set itemline.Amount = amount
+      set itemline.UnitPrice = product.ListPrice
+      set status = order.Items.Insert(itemline)
+    }
 	   
-	  set status = order.%Save()
-      if status'=$$$OK {
-	     write "注文エラー:" 
-	     do $System.Status.DisplayError(status)
-	     $$$ThrowStatus(status)
-	   }
+    set status = order.%Save()
+    if status'=$$$OK {
+      write "注文エラー:" 
+      do $System.Status.DisplayError(status)
+      $$$ThrowStatus(status)
+    }
 	 
-	  set pId = order.%Id()
+    set pId = order.%Id()
 
-	  }
-	  catch e {
+  }
+  catch e {
 		
-		set status = e.AsStatus()
-	  }
+    set status = e.AsStatus()
+  }
 	    	
-	Quit status
+  Quit status
 }
 
 // 合計価格の計算ロジック
 
 Method TotalPriceGet() As %Integer
 {
-	Set total = 0
-	For i=1:1:..Items.Count() {
-		Set total =total + ..Items.GetAt(i).Subtotal	
-	}
-	Quit total
+  Set total = 0
+  For i=1:1:..Items.Count() {
+    Set total =total + ..Items.GetAt(i).Subtotal	
+  }
+  Quit total
 }
 
 Storage Default
