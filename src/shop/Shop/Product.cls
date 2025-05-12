@@ -37,235 +37,233 @@ Index NameIdx On Name;
 
 ClassMethod createTestData(dir As %String)
 {
-	Set s=##class(%Stream.FileBinary).%New()
-	Do s.LinkToFile(dir_"Image1.gif")
+  Set s=##class(%Stream.FileBinary).%New()
+  Do s.LinkToFile(dir_"Image1.gif")
 	
-	Set p=##class(Shop.Product).%New()
-	Set p.Code="PC001"
-	Set p.Name="ThinkPad"
-	Set p.Description="Intelテクノロジを採用。1.2kgのボディにDVDドライブを搭載"
- 	Set p.ListPrice=199800
- 	Do p.Picture.CopyFrom(s)
-	Do p.%Save()
+  Set p=##class(Shop.Product).%New()
+  Set p.Code="PC001"
+  Set p.Name="ThinkPad"
+  Set p.Description="Intelテクノロジを採用。1.2kgのボディにDVDドライブを搭載"
+  Set p.ListPrice=199800
+  Do p.Picture.CopyFrom(s)
+  Do p.%Save()
 	
-	Set s=##class(%Stream.FileBinary).%New()
-	Do s.LinkToFile(dir_"Image2.gif")
+  Set s=##class(%Stream.FileBinary).%New()
+  Do s.LinkToFile(dir_"Image2.gif")
 
-	Set p=##class(Shop.Product).%New()
-	Set p.Code="MNT001"
-	Set p.Name="17インチ液晶モニタ"
-	Set p.Description="厚さ1.5cmの超薄型液晶モニタ"
-	Set p.ListPrice=89800
- 	Do p.Picture.CopyFrom(s)
-	Do p.%Save()
+  Set p=##class(Shop.Product).%New()
+  Set p.Code="MNT001"
+  Set p.Name="17インチ液晶モニタ"
+  Set p.Description="厚さ1.5cmの超薄型液晶モニタ"
+  Set p.ListPrice=89800
+  Do p.Picture.CopyFrom(s)
+  Do p.%Save()
 	
-	Quit
+  Quit
 }
 
 ClassMethod createTestDataJSON() As %Status
 {
-	set status = $$$OK
+  set status = $$$OK
 	
-	do ..%KillExtent()
+  do ..%KillExtent()
 	
-	set json(1) = {"Code":"PC001","Name":"ノートPC","Description":"Intelテクノロジーを採用　1.2kgのボディにDVDドライブを搭載","ListPrice":199800,"ImageFile":"/intersystems/iris/shop/images/notepc.gif"}
-    set json(2) = {"Code":"MOU001","Name":"2ボタンマウス","Description":"普通のマウスです。","ListPrice":2500,"ImageFile":"/intersystems/iris/shop/images/mouse.gif"}
-    set json(3) = {"Code":"MNT001","Name":"17インチ液晶モニター","Description":"厚さ1.5cmの薄型モニター","ListPrice":19800,"ImageFile":"/intersystems/iris/shop/images/monitor.gif"}
-    set json(4) = {"Code":"TEL001","Name":"電話機","Description":"シンプルかつ大きなボタンで押しやすい電話機","ListPrice":15000,"ImageFile":"/intersystems/iris/shop/images/telephone.gif"}
-    
+  set json(1) = {"Code":"PC001","Name":"ノートPC","Description":"Intelテクノロジーを採用　1.2kgのボディにDVDドライブを搭載","ListPrice":199800,"ImageFile":"/intersystems/iris/shop/images/notepc.gif"}
+  set json(2) = {"Code":"MOU001","Name":"2ボタンマウス","Description":"普通のマウスです。","ListPrice":2500,"ImageFile":"/intersystems/iris/shop/images/mouse.gif"}
+  set json(3) = {"Code":"MNT001","Name":"17インチ液晶モニター","Description":"厚さ1.5cmの薄型モニター","ListPrice":19800,"ImageFile":"/intersystems/iris/shop/images/monitor.gif"}
+  set json(4) = {"Code":"TEL001","Name":"電話機","Description":"シンプルかつ大きなボタンで押しやすい電話機","ListPrice":15000,"ImageFile":"/intersystems/iris/shop/images/telephone.gif"}
+    	
+  for i = 1:1:4 {
+    set status = ..createRecord(json(i))
+  }
 	
-	for i = 1:1:4 {
-		set status = ..createRecord(json(i))
-	}
-	
-	Quit status
+  Quit status
 }
 
 ClassMethod modifyTestData() As %Status
 {
-	set status = $$$OK
+  set status = $$$OK
 	
-	set json(1) = {"Code":"PC001","Description":"AMDテクノロジーを採用　1.2kgのボディにDVDドライブを搭載"}
-    set json(2) = {"Code":"MOU001","Name":"有線マウス","Description":"普通のマウスです。"}
-    set json(3) = {"Code":"MNT001","ListPrice":15800}
-    set json(4) = {"Code":"TEL001","ImageFile":"c:\\temp\\notepc.gif"}
-    
+  set json(1) = {"Code":"PC001","Description":"AMDテクノロジーを採用　1.2kgのボディにDVDドライブを搭載"}
+  set json(2) = {"Code":"MOU001","Name":"有線マウス","Description":"普通のマウスです。"}
+  set json(3) = {"Code":"MNT001","ListPrice":15800}
+  set json(4) = {"Code":"TEL001","ImageFile":"c:\\temp\\notepc.gif"}
+    	
+  for i = 1:1:4 {
+    set status = ..modifyRecord(json(i))
+  }
 	
-	for i = 1:1:4 {
-		set status = ..modifyRecord(json(i))
-	}
-	
-	Quit status
+  Quit status
 }
 
 ClassMethod createRecord(pInfo As %String) As %Status
 {
-	set status = $$$OK
+  set status = $$$OK
 	
-	try {
+  try {
 			
-	  if $isobject(pInfo) {
-	    set tempobj = pInfo
-	  }
-	  else {
-	    set tempobj = ##class(%DynamicAbstractObject).%FromJSON(pInfo)
-	  }
+    if $isobject(pInfo) {
+      set tempobj = pInfo
+    }
+    else {
+      set tempobj = ##class(%DynamicAbstractObject).%FromJSON(pInfo)
+    }
 	
-	  set newrecord = ..%New()
+    set newrecord = ..%New()
 	  
-	  //画像情報は外部ファイルを指定し、ストリームオブジェクトを生成
+    //画像情報は外部ファイルを指定し、ストリームオブジェクトを生成
 	
-	  if tempobj.ImageFile '= "" {
-		set picture = ##class(%Stream.FileBinary).%New()
-		do picture.LinkToFile(tempobj.ImageFile)
-	  }
+    if tempobj.ImageFile '= "" {
+      set picture = ##class(%Stream.FileBinary).%New()
+      do picture.LinkToFile(tempobj.ImageFile)
+    }
 		
-	  set status = newrecord.%JSONImport(pInfo)
+    set status = newrecord.%JSONImport(pInfo)
 
-      if $data(picture) {
- 	    do newrecord.Picture.CopyFrom(picture)
-      }
+    if $data(picture) {
+      do newrecord.Picture.CopyFrom(picture)
+    }
       
-	  set status = newrecord.%Save()
+    set status = newrecord.%Save()
 	  
-	  }
-	  catch e {
+  }
+  catch e {
 		
-		set status = e.AsStatus()
-	  }
+    set status = e.AsStatus()
+  }
 	    	
-	Quit status
+  Quit status
 }
 
 ClassMethod modifyRecord(pInfo As %String) As %Status
 {
-	set status = $$$OK
+  set status = $$$OK
 	
-	try {
+  try {
 	
-	  if $isobject(pInfo) {
-	    set tempobj = pInfo
-	  }
-	  else {
-	    set tempobj = ##class(%DynamicAbstractObject).%FromJSON(pInfo)
-	  }
+    if $isobject(pInfo) {
+      set tempobj = pInfo
+    }
+    else {
+      set tempobj = ##class(%DynamicAbstractObject).%FromJSON(pInfo)
+    }
 	  	  
-	  set record = ..%OpenId(tempobj.Code)
+    set record = ..%OpenId(tempobj.Code)
 	
-	  //画像情報は外部ファイルを指定し、ストリームオブジェクトを生成
+    //画像情報は外部ファイルを指定し、ストリームオブジェクトを生成
 	
-	  if tempobj.ImageFile '= "" {
-		set picture = ##class(%Stream.FileBinary).%New()
-		do picture.LinkToFile(tempobj.ImageFile)
-	  }
+    if tempobj.ImageFile '= "" {
+      set picture = ##class(%Stream.FileBinary).%New()
+      do picture.LinkToFile(tempobj.ImageFile)
+    }
 		
-	  set status = record.%JSONImport(pInfo)
+    set status = record.%JSONImport(pInfo)
 
-      if $data(picture) {
- 	    do record.Picture.CopyFrom(picture)
-      }
+    if $data(picture) {
+      do record.Picture.CopyFrom(picture)
+    }
 
-	  set status = record.%Save()
+    set status = record.%Save()
 	  
-	  }
-	  catch e {
+  }
+  catch e {
 		
-		set status = e.AsStatus()
-	  }
+    set status = e.AsStatus()
+  }
 	    	
-	Quit status
+  Quit status
 }
 
 ClassMethod listRecords() As %String
 {
-	set status = $$$OK
+  set status = $$$OK
+ 	
+  try {
 	
-	try {
-	
-      set allrecords = "select code,name,description,listprice from shop.product where deleteflg = 0"
-      set statement1 = ##class(%SQL.Statement).%New()
-      set qstatus = statement1.%Prepare(allrecords)
-      if qstatus'=$$$OK {
-	    write "%Prepare失敗:" 
-	    do $System.Status.DisplayError(qstatus)
-	    $$$ThrowStatus(qstatus)
-	  }
-      set rset = statement1.%Execute()
-      set array = []
-      while rset.%Next() {
-	    set dobj = {}
-        set dobj.Code = rset.code
-        set dobj.Name = rset.name
-        set dobj.Description = rset.description
-        set dobj.ListPrice = rset.listprice
-		set dobj.Image = $case(rset.code,"MNT001":"monitor.gif","MOU001":"mouse.gif","PC001":"notepc.gif","TEL001":"telephone.gif",:"nodata")
-        do array.%Push(dobj)
+    set allrecords = "select code,name,description,listprice from shop.product where deleteflg = 0"
+    set statement1 = ##class(%SQL.Statement).%New()
+    set qstatus = statement1.%Prepare(allrecords)
+    if qstatus'=$$$OK {
+      write "%Prepare失敗:" 
+      do $System.Status.DisplayError(qstatus)
+      $$$ThrowStatus(qstatus)
+    }
+    set rset = statement1.%Execute()
+    set array = []
+    while rset.%Next() {
+      set dobj = {}
+      set dobj.Code = rset.code
+      set dobj.Name = rset.name
+      set dobj.Description = rset.description
+      set dobj.ListPrice = rset.listprice
+      set dobj.Image = $case(rset.code,"MNT001":"monitor.gif","MOU001":"mouse.gif","PC001":"notepc.gif","TEL001":"telephone.gif",:"nodata")
+      do array.%Push(dobj)
       }
       
       write array.%ToJSON()
       
 	  
-	}
-	catch e {
+  }
+  catch e {
 		
-	  set status = e.AsStatus()
-	}
+    set status = e.AsStatus()
+  }
 	    	
-	Quit status
+  Quit status
 }
 
 ClassMethod getRecord(pCode As %String) As %String
 {
-	set status = $$$OK
+  set status = $$$OK
 	
-	try {
+  try {
 	
-      set onerecord = "select code,name,description,listprice from shop.product where code = ?"
-      set statement1 = ##class(%SQL.Statement).%New()
-      set qstatus = statement1.%Prepare(onerecord)
-      if qstatus'=$$$OK {
-	    write "%Prepare失敗:" 
-	    do $System.Status.DisplayError(qstatus)
-	    $$$ThrowStatus(qstatus)
-	  }
-      set rset = statement1.%Execute(pCode)
-      while rset.%Next() {
-	    set dobj = {}
-        set dobj.Code = rset.code
-        set dobj.Name = rset.name
-        set dobj.Description = rset.description
-        set dobj.ListPrice = rset.listprice
-        write dobj.%ToJSON()
-      }
+    set onerecord = "select code,name,description,listprice from shop.product where code = ?"
+    set statement1 = ##class(%SQL.Statement).%New()
+    set qstatus = statement1.%Prepare(onerecord)
+    if qstatus'=$$$OK {
+      write "%Prepare失敗:" 
+      do $System.Status.DisplayError(qstatus)
+      $$$ThrowStatus(qstatus)
+    }
+    set rset = statement1.%Execute(pCode)
+    while rset.%Next() {
+      set dobj = {}
+      set dobj.Code = rset.code
+      set dobj.Name = rset.name
+      set dobj.Description = rset.description
+      set dobj.ListPrice = rset.listprice
+      write dobj.%ToJSON()
+    }
       
 	  
-	  }
-	  catch e {
+  }
+  catch e {
 		
-		set status = e.AsStatus()
-	  }
+    set status = e.AsStatus()
+  }
 	    	
-	Quit status
+  Quit status
 }
 
 ClassMethod deleteRecord(pCode As %String) As %String
 {
-	set status = $$$OK
+  set status = $$$OK
 		
-	try {
+  try {
 	
-      set record = ..%OpenId(pCode)
-      set record.Deleteflg = 1
+    set record = ..%OpenId(pCode)
+    set record.Deleteflg = 1
       
-	  set status = record.%Save()      
+    set status = record.%Save()      
 	  
-	}
-	catch e {
+  }
+  catch e {
 		
-		set status = e.AsStatus()
-	}
+    set status = e.AsStatus()
+  }
 	    	
-	Quit status
+  Quit status
 }
 
 Storage Default
