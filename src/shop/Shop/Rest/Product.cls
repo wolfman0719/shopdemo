@@ -5,118 +5,118 @@ Class Shop.Rest.Product Extends %Base
 
 ClassMethod createRecord() As %Status
 {
-	set status = $$$OK
+  set status = $$$OK
 	
-	try {
+  try {
 		
-	  if $data(%request) {
-	    set len = 1000
-		set json = %request.Content.Read(.len,.status)
-        set %response.ContentType="application/json"
-	    set %response.CharSet = "utf-8"
-	  }
+    if $data(%request) {
+      set len = 1000
+      set json = %request.Content.Read(.len,.status)
+      set %response.ContentType="application/json"
+      set %response.CharSet = "utf-8"
+    }
 	  
-	  set status = ##class(Shop.Product).createRecord(json)
+    set status = ##class(Shop.Product).createRecord(json)
 	
-	}
-	catch e {
+  }
+  catch e {
 		
-	  set status = e.AsStatus()
-	}
+    set status = e.AsStatus()
+  }
 	    	
-	Quit status
+   Quit status
 }
 
 ClassMethod modifyRecord(pInfo As %String) As %Status
 {
-	set status = $$$OK
+  set status = $$$OK
 	
-	try {
+  try {
 		
-	  if $data(%request) {
-	    set len = 1000
-		set json = %request.Content.Read(.len,.status)
-        set %response.ContentType="application/json"
-	    set %response.CharSet = "utf-8"
-	  }
+    if $data(%request) {
+      set len = 1000
+      set json = %request.Content.Read(.len,.status)
+      set %response.ContentType="application/json"
+      set %response.CharSet = "utf-8"
+    }
 	  
-	  set status = ##class(Shop.Product).modifyRecord(json)
+    set status = ##class(Shop.Product).modifyRecord(json)
 	
-	}
-	catch e {
+  }
+  catch e {
 		
-	  set status = e.AsStatus()
-	}
+    set status = e.AsStatus()
+  }
 	    		    	
-	Quit status
+  Quit status
 }
 
 ClassMethod listRecords() As %String
 {
-	set status = $$$OK
+  set status = $$$OK
 	
-	try {
+  try {
 	
-      if $data(%request) {
-        set %response.ContentType="application/json"
-	    set %response.CharSet = "utf-8"
-	  }
+    if $data(%request) {
+      set %response.ContentType="application/json"
+      set %response.CharSet = "utf-8"
+    }
 	  
-	  set status = ##class(Shop.Product).listRecords()
+    set status = ##class(Shop.Product).listRecords()
 	  
-	}
-	catch e {
+  }
+  catch e {
 		
-	  set status = e.AsStatus()
+    set status = e.AsStatus()
 	  
-	}
+  }
 	    	
-	Quit status
+  Quit status
 }
 
 ClassMethod getRecord(pCode As %String) As %String
 {
-	set status = $$$OK
+  set status = $$$OK
 		
-	try {
+  try {
 	
-      if $data(%request) {
-        set %response.ContentType="application/json"
-	    set %response.CharSet = "utf-8"
-	  }
+    if $data(%request) {
+      set %response.ContentType="application/json"
+      set %response.CharSet = "utf-8"
+    }
 	  
-	  set status = ##class(Shop.Product).getRecord(pCode)
+    set status = ##class(Shop.Product).getRecord(pCode)
 	  	  
-	  }
-	  catch e {
+  }
+  catch e {
 		
-		set status = e.AsStatus()
+    set status = e.AsStatus()
 		
-	  }
+  }
 	    	
-	Quit status
+  Quit status
 }
 
 ClassMethod deleteRecord(pCode As %String) As %String
 {
-	set status = $$$OK
+  set status = $$$OK
 		
-	try {
+  try {
 
-	  if $data(%request) {
-        set %response.ContentType="application/json"
-	    set %response.CharSet = "utf-8"
-	  }
+    if $data(%request) {
+      set %response.ContentType="application/json"
+      set %response.CharSet = "utf-8"
+    }
 	
-	  set status = ##class(Shop.Product).deleteRecord(pCode)
+    set status = ##class(Shop.Product).deleteRecord(pCode)
 	  
-	}
-	catch e {
+  }
+  catch e {
 		
-		set status = e.AsStatus()
-	}
+    set status = e.AsStatus()
+  }
 	    	
-	Quit status
+  Quit status
 }
 
 }
