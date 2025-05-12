@@ -5,8 +5,8 @@ Property DOB As %Date;
 
 Method determinePrice(listprice As %Integer) As %Integer
 {
-	// 割引なし
-	Quit listprice
+  // 割引なし
+  Quit listprice
 }
 
 Storage Default
