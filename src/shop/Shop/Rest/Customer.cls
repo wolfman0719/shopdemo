@@ -5,153 +5,152 @@ Class Shop.Rest.Customer Extends %Base
 
 ClassMethod createRecord() As %Status
 {
-	set status = $$$OK
+  set status = $$$OK
 	
-	try {
+  try {
 		
-	  if $data(%request) {
-        set %response.ContentType="application/json"
-	    set %response.CharSet = "utf-8"
-	    set len = 1000
-		set json = %request.Content.Read(.len,.status)
-	  }
+    if $data(%request) {
+      set %response.ContentType="application/json"
+      set %response.CharSet = "utf-8"
+      set len = 1000
+      set json = %request.Content.Read(.len,.status)
+    }
 	  
-	  set status = ##class(Shop.Customer).createRecord(json)
+    set status = ##class(Shop.Customer).createRecord(json)
 	
-	}
-	catch e {
+  }
+  catch e {
 		
-	  set status = e.AsStatus()
-	}
+    set status = e.AsStatus()
+  }
 	    	
-	Quit status
+  Quit status
 }
 
 ClassMethod modifyRecord(pInfo As %String) As %Status
 {
-	set status = $$$OK
+  set status = $$$OK
 	
-	try {
+  try {
 		
-	  if $data(%request) {
-        set %response.ContentType="application/json"
-	    set %response.CharSet = "utf-8"
-	    set len = 1000
-		set json = %request.Content.Read(.len,.status)
-	  }
+    if $data(%request) {
+      set %response.ContentType="application/json"
+      set %response.CharSet = "utf-8"
+      set len = 1000
+      set json = %request.Content.Read(.len,.status)
+    }
 	  
-	  set status = ##class(Shop.Customer).modifyRecord(json)
+    set status = ##class(Shop.Customer).modifyRecord(json)
 	
-	}
-	catch e {
+  }
+  catch e {
 		
-	  set status = e.AsStatus()
-	}
+    set status = e.AsStatus()
+  }
 	    		    	
-	Quit status
+  Quit status
 }
 
 ClassMethod listRecords() As %String
 {
-	set status = $$$OK
+  set status = $$$OK
 	
-	try {
+  try {
 	
-      if $data(%request) {
-        set %response.ContentType="application/json"
-	    set %response.CharSet = "utf-8"
-	  }
+    if $data(%request) {
+      set %response.ContentType="application/json"
+      set %response.CharSet = "utf-8"
+    }
 	  
-	  set status = ##class(Shop.Customer).listRecords()
+    set status = ##class(Shop.Customer).listRecords()
 	  
-	}
-	catch e {
+  }
+  catch e {
 		
-	  set status = e.AsStatus()
+    set status = e.AsStatus()
 	  
-	}
+  }
 	    	
-	Quit status
+  Quit status
 }
 
 ClassMethod getRecord(pId As %String) As %String
 {
-	set status = $$$OK
+  set status = $$$OK
 		
-	try {
-	
-      if $data(%request) {
-        set %response.ContentType="application/json"
-	    set %response.CharSet = "utf-8"
-	  }
+  try {
+ 	
+    if $data(%request) {
+      set %response.ContentType="application/json"
+      set %response.CharSet = "utf-8"
+    }
 	  
-	  set status = ##class(Shop.Customer).getRecord(pId)
+    set status = ##class(Shop.Customer).getRecord(pId)
 	  	  
-	}
-	catch e {
+  }
+  catch e {
 		
-	  set status = e.AsStatus()
+    set status = e.AsStatus()
 		
-	}
+  }
 	    	
-	Quit status
+  Quit status
 }
 
 ClassMethod deleteRecord(pCode As %String) As %String
 {
-	set status = $$$OK
+  set status = $$$OK
 		
-	try {
+  try {
 
-	  if $data(%request) {
-        set %response.ContentType="application/json"
-	    set %response.CharSet = "utf-8"
-	  }
+    if $data(%request) {
+      set %response.ContentType="application/json"
+      set %response.CharSet = "utf-8"
+    }
 	
-	  set status = ##class(Shop.Customer).deleteRecord(pCode)
+    set status = ##class(Shop.Customer).deleteRecord(pCode)
 	  
-	}
-	catch e {
+  }
+  catch e {
 		
-		set status = e.AsStatus()
-	}
+    set status = e.AsStatus()
+  }
 	    	
-	Quit status
+  Quit status
 }
 
 ClassMethod checkPassword(pUserId As %String, pPassword) As %Status
 {
-	set status = $$$OK
+  set status = $$$OK
 	
-	try {
+  try {
 		
-	  if $data(%request) {
-        set %response.ContentType="application/json"
-	    set %response.CharSet = "utf-8"
-	  }
+    if $data(%request) {
+      set %response.ContentType="application/json"
+      set %response.CharSet = "utf-8"
+    }
 	  
-	  set cust=##class(Shop.Customer).CheckPasswd(pUserId, pPassword)
+    set cust=##class(Shop.Customer).CheckPasswd(pUserId, pPassword)
 
-	  set return = {}
+    set return = {}
 
-	  if cust = "" {
-		set return.authorized = "ng"
+    if cust = "" {
+      set return.authorized = "ng"
 
-	  }
-	  else {
-		set return.authorized = "ok"
-		set return.ID = cust.%Id()
-	  }
+    }
+    else {
+      set return.authorized = "ok"
+      set return.ID = cust.%Id()
+    }
 
-	  do return.%ToJSON()
-	
-	}
-	catch e {
+    do return.%ToJSON()
+  }
+  catch e {
 		
-	  set status = e.AsStatus()
-	}
+    set status = e.AsStatus()
+  }
 	    		    	
-	Quit status
+  Quit status
 }
 
 }
