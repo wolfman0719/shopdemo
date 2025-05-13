@@ -24,9 +24,9 @@ Method PlaceOrder(pRequest As Shop.Message.Request.Order, Output pResponse As En
 XData MessageMap
 {
 <MapItems>
-	<MapItem MessageType="Ens.Request"> 
-		<Method>PlaceOrder</Method>
-	</MapItem>
+<MapItem MessageType="Ens.Request"> 
+<Method>PlaceOrder</Method>
+</MapItem>
 </MapItems>
 }
 
