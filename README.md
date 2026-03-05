@@ -86,5 +86,7 @@ cp /intersystems/iris/shop/samples/* /intersystems/iris/shop/message/in
 
 react-setup.md参照
 
-### Claude Codeを使用して#serverを使用しないようにしたバージョン
+### ClaudeCode
+
+Claude Codeを使用して#serverを使用しないようにしたバージョン
 
