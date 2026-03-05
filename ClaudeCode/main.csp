@@ -1,0 +1,111 @@
+<HTML>
+<HEAD>
+<TITLE>メイン</TITLE>
+<STYLE type="text/css">
+<!--
+.editnumeric{
+  text-align : right;
+}
+-->
+</STYLE>
+</HEAD>
+<BODY>
+
+<CSP:OBJECT NAME="cust" CLASSNAME="Shop.Customer" OBJID=#($get(%session.Data("oid")))#>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<SCRIPT LANGUAGE="JavaScript">
+function addent(id, amount) {
+  // 個数が0または空の場合、入力欄をクリアしてからサーバーへ送信
+  if (amount === "" || +amount === 0) {
+    document.form.elements["amount" + id].value = "";
+    amount = 0;
+  }
+
+  axios.post('http://localhost:8080/csp/user/Shop.AddEntry.cls', {
+    id: id,
+    amount: amount
+  })
+  .then(function(response) {
+    var data = response.data;
+
+    // ログアウト検知
+    if (data.LogoutMessage) {
+      alert(data.LogoutMessage);
+      top.document.location = 'login.htm';
+      return;
+    }
+
+    // 個数が0でかごにエントリがない場合のエラー
+    if (data.ErrorMessage) {
+      alert(data.ErrorMessage);
+      return;
+    }
+
+    // 注文件数をメニューフレームのセレクトボックスに反映
+    top.menu.document.order.orderlist.length = data.OrderLength;
+
+    // 注文リストの各エントリを反映
+    var ids = data.OrderIds;
+    var lines = data.OrderLines;
+    for (var n = 0; n < ids.length; n++) {
+      top.menu.document.order.orderlist[n].value = ids[n];
+      top.menu.document.order.orderlist[n].text  = lines[n];
+    }
+
+    // 合計金額を反映
+    top.menu.document.order.total.value = data.Total;
+  })
+  .catch(function(error) {
+    console.log(error);
+  });
+}
+</SCRIPT>
+
+<SCRIPT LANGUAGE="SQL" NAME="res">
+ SELECT ID,Code,Name,Description,ListPrice FROM Shop.Product where deleteflg = 0
+</SCRIPT>
+
+<FORM name=form>
+
+<TABLE cellpadding="0" cellspacing="2"><TBODY>
+<CSP:WHILE CONDITION="res.Next()">
+<TR><TD>
+<TABLE border="1" cellspacing="0" cellpadding="0">
+<TR><TD valign="middle" align="center">
+<TABLE cellspacing="3" cellpadding="3" height="60">
+<TBODY>
+<TR>
+<TD rowspan="2" width="100" align="center" valign="middle" nowrap>
+
+<SCRIPT LANGUAGE="SQL" NAME="resimage" P1=#(res.GetData(2))#>
+  SELECT Picture FROM Shop.Product where Code=?
+</SCRIPT>
+<csp:WHILE CONDITION="resimage.Next()">
+<IMG SRC="_CSP.StreamServer.cls?STREAMOID=#(..Encrypt(resimage.GetData(1)))#&CONTENTTYPE=image/gif" width="100" height="100" border="0">
+</csp:WHILE>
+</TD>
+<TD width="160"><B>#(res.GetData(3))#</B></TD>
+<TD width="128"><FONT color="#333333">商品コード: #(res.GetData(2))#</FONT></TD>
+<TD rowspan="2" align="center" width="71"><FONT color="#333333">注文数<BR>
+</FONT><FONT color="#333333"><INPUT size="3" maxlength="3" type="text" name="amount#(res.GetData(1))#" class="editnumeric">個</FONT><BR>
+<BR>
+<INPUT type="button" value="かごへ" onclick="addent('#(res.GetData(1))#',form.elements['amount#(res.GetData(1))#'].value);"></TD>
+</TR>
+<TR>
+<TD width="160"><FONT size="-1" color="#333333">#(res.GetData(4))#</FONT></TD>
+<TD width="128" align="right"><FONT size="-1" face="ＭＳ Ｐゴシック" color="#CC0033"><I><FONT size="+3">#($fnumber(cust.determinePrice(res.GetData(5)),","))#</FONT></I> </FONT><FONT color="#CC0033">円</FONT></TD>
+</TR>
+</TBODY>
+</TABLE>
+</TD></TR></TABLE>
+</TD></TR>
+
+</CSP:WHILE>
+
+</TBODY></TABLE>
+</FORM>
+
+</BODY>
+</HTML>
