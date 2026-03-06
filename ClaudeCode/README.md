@@ -1,6 +1,6 @@
-#Claude Codeによる自動プログラミング
+# Claude Codeによる自動プログラミング
 
-## #serverを使用しないように書き換えたバージョン
+## HyperEvent server callを使用しないように書き換えたバージョン
 
 ### main.csp
 
