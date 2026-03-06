@@ -23,7 +23,11 @@ function addent(id, amount) {
     amount = 0;
   }
 
-  axios.post('http://localhost:8080/csp/user/Shop.AddEntry.cls', {
+  var basePath = location.pathname.replace(/\/[^\/]*$/, '').replace('/Order/Shop', '');
+  
+  var url = location.protocol + '//' + location.host + basePath + '/Shop.AddEntry.cls';
+
+  axios.post(url, {
     id: id,
     amount: amount
   })
