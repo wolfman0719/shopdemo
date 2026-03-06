@@ -19,4 +19,5 @@ set io = ##class(%SYS.NLS.Device).SetIO("UTF8")
 Do $system.OBJ.LoadDir("/intersystems/iris/shop/Shop/","ck",,1)
 do ##class(Shop.Customer).createTestDataJSON()
 do ##class(Shop.Product).createTestDataJSON()
+do $system.CSP.LoadPageDir("/csp/user")
 halt
