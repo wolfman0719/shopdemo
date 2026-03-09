@@ -88,5 +88,5 @@ react-setup.md参照
 
 ### ClaudeCode
 
-Claude Codeを使用して#serverを使用しないようにしたバージョン
+Claude Codeを使用して#serverを使用しないようにコードを自動生成したバージョン
 
