@@ -27,6 +27,9 @@ function addent(id, amount) {
   
   var url = location.protocol + '//' + location.host + basePath + '/Shop.AddEntry.cls';
 
+  // REST APIで呼び出す場合は、以下をコメントアウト
+  // var url = location.protocol + '//' + location.host + basePath + '/api/addEntry.cls';
+
   axios.post(url, {
     id: id,
     amount: amount
