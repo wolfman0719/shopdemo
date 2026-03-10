@@ -123,7 +123,7 @@ ClassMethod CreateAPIDefinition() As %Status
     set sec = ##class("Security.Applications").%New()
     set sec.Name        = "/csp/"_namespace_"/api"
     set sec.NameSpace   = namespace
-    set sec.DispatchClass = "Shop.API"
+    set sec.DispatchClass = "Shop.Broker"
     set sec.AutheEnabled = 96
     set sec.CookiePath = "/csp/"_namespace_"/"
     set sc = sec.%Save()
