@@ -114,4 +114,22 @@ ClassMethod AddEntry() As %Status
   quit status
 }
 
+/// REST API定義の登録
+ClassMethod CreateAPIDefinition() As %Status
+{
+    Set sc = $$$OK
+    set namespace = $namespace
+    set $namespace = "%SYS"
+    set sec = ##class("Security.Applications").%New()
+    set sec.Name        = "/csp/"_namespace_"/api"
+    set sec.NameSpace   = namespace
+    set sec.DispatchClass = "Shop.API"
+    set sec.AutheEnabled = 96
+    set sec.CookiePath = "/csp/"_namespace_"/"
+    set sc = sec.%Save()
+    set $namespace = namespace
+
+    Return sc
+}
+
 }
